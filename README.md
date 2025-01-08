@@ -1,4 +1,4 @@
-SINGLE-FILE LIBRARY FOR HEAP-LESS IMPLEMENTATION OF RSA ENCRYPTION AND SIGNING IN ZIG WITH OAEP PADDING USING ONLY ONE DEPENDENCY FROM STANDARD LIBRARY FOR HASHING FUNCTION
+Single-file library for heap-less implementation of RSA encryption and signatures in zig with OAEP padding using only one dependency from standard library for hashing function
 
 CHANGE COMPILE TIME VARIABLES IN rsa.zig TO USE DIFFERENT MODULUS SIZES
 
