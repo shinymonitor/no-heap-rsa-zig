@@ -1,14 +1,19 @@
-Single-file library for heap-less implementation of RSA encryption and signatures in zig with OAEP padding using only one dependency from standard library for hashing function
+Single-file library for heap-less implementation of RSA encryption and signatures in zig with OAEP+ padding using hashing function from standard library
 
-CHANGE COMPILE TIME VARIABLES IN rsa.zig TO USE DIFFERENT MODULUS SIZES
+**Change compile time variables in rsa.zig to use different modulus sizes**
 
-FUNCTIONS:
+### Functions:
 5 public functions from rsa.zig
-- RSA_key_gen()
-- RSA_sign(MESSAGE, signer_private_key, signer_public_key)
-- RSA_verify(Signature, MESSAGE, signer_public_key)
-- RSA_encrypt(MESSAGE, receiver_public_key)
-- RSA_decrypt(ENCRYPTED_MESSAGE , receiver_public_key, reciever_private_key)
+- gen_keys()
+- sign(message, signer_private_key, signer_public_key) 
+- verify(signature, message, signer_public_key)
+- encrypt(message, receiver_public_key)
+- decrypt(encrypted_message , receiver_public_key, reciever_private_key)
 
-TESTING:
+### Testing:
 Run test.zig
+
+### To-Do
+Montgomery multiplication
+Saving Keys to disk (PEM or DER)
+
