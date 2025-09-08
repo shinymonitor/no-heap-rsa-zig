@@ -14,12 +14,12 @@ pub fn main() !void {
     std.debug.print("TIME: {any}\n", .{t2 - t1});
     std.debug.print("BOB'S KEYS:\nPublic Key: {any}\nPrivate Key: {any}\n", .{ bob_keys.public_key, bob_keys.private_key });
     t1 = std.time.milliTimestamp();
-    const alice_signature = rsa.sign("SIGNED DATA", alice_keys.private_key, alice_keys.public_key);
+    const alice_signature = rsa.sign("SIGNED DATA", alice_keys.public_key, alice_keys.private_key);
     t2 = std.time.milliTimestamp();
     std.debug.print("TIME: {any}\n", .{t2 - t1});
     std.debug.print("ALICE'S SIGNATURE FOR \"SIGNED DATA\": {any}\n", .{alice_signature});
     t1 = std.time.milliTimestamp();
-    const bob_verify = rsa.verify(alice_signature, "SIGNED DATA", alice_keys.public_key);
+    const bob_verify = rsa.verify("SIGNED DATA", alice_signature, alice_keys.public_key);
     t2 = std.time.milliTimestamp();
     std.debug.print("TIME: {any}\n", .{t2 - t1});
     std.debug.print("BOB VERIFY SIGNATURE: {any}\n", .{bob_verify});

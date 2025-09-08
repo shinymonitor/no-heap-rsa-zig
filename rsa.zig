@@ -276,15 +276,15 @@ pub fn gen_keys() Keys {
     out.private_key = d;
     return out;
 }
-pub fn encrypt(inp: []const u8, public_key: BitsType) OAEP_PLUS_encode_error!BitsType {
-    const encoded = OAEP_PLUS_encode(inp) catch |err| {
+pub fn encrypt(message: []const u8, public_key: BitsType) OAEP_PLUS_encode_error!BitsType {
+    const encoded = OAEP_PLUS_encode(message) catch |err| {
         return err;
     };
     const enc = INT_FROM_BYTES(BitsType, (encoded)[0..], BIG_ENDIAN);
     return mod_exp_2(enc, E, public_key);
 }
-pub fn decrypt(inp: BitsType, public_key: BitsType, private_key: BitsType) OAEP_PLUS_decode_error![MAX_MESSAGE_LEN]u8 {
-    const enc = mod_exp_2(inp, private_key, public_key);
+pub fn decrypt(blob: BitsType, public_key: BitsType, private_key: BitsType) OAEP_PLUS_decode_error![MAX_MESSAGE_LEN]u8 {
+    const enc = mod_exp_2(blob, private_key, public_key);
     var encoded = [_]u8{0x00} ** MODULUS_SIZE;
     BYTES_FROM_INT(BitsType, encoded[0..], enc, BIG_ENDIAN);
     var decoded_buf = [_]u8{0} ** MAX_MESSAGE_LEN;
@@ -293,14 +293,14 @@ pub fn decrypt(inp: BitsType, public_key: BitsType, private_key: BitsType) OAEP_
     @memcpy(decoded_buf[0..decoded.len], decoded);
     return decoded_buf;
 }
-pub fn sign(inp: []const u8, private_key: BitsType, public_key: BitsType) BitsType {
-    const hashed: BitsType = INT_FROM_BYTES(HashBitsType, hash_bytes(inp)[0..], BIG_ENDIAN);
+pub fn sign(message: []const u8, public_key: BitsType, private_key: BitsType) BitsType {
+    const hashed: BitsType = INT_FROM_BYTES(HashBitsType, hash_bytes(message)[0..], BIG_ENDIAN);
     return mod_exp_2(hashed, private_key, public_key);
 }
-pub fn verify(inp: BitsType, message: []const u8, public_key: BitsType) bool {
+pub fn verify(message: []const u8, signature: BitsType, public_key: BitsType) bool {
     const hash = hash_bytes(message);
     const hashed: [MODULUS_SIZE]u8 = [_]u8{0x00} ** (MODULUS_SIZE - HASH_SIZE) ++ hash;
-    const out_n = mod_exp_2(inp, E, public_key);
+    const out_n = mod_exp_2(signature, E, public_key);
     var out = [_]u8{0x00} ** MODULUS_SIZE;
     BYTES_FROM_INT(BitsType, (out)[0..], out_n, BIG_ENDIAN);
     for (0..MODULUS_SIZE) |i| {

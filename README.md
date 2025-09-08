@@ -5,8 +5,8 @@ Single-file library for heap-less implementation of RSA encryption and signature
 ### Functions:
 5 public functions from rsa.zig
 - gen_keys()
-- sign(message, signer_private_key, signer_public_key) 
-- verify(signature, message, signer_public_key)
+- sign(message, signer_public_key, signer_private_key) 
+- verify(message, signature, signer_public_key)
 - encrypt(message, receiver_public_key)
 - decrypt(encrypted_message , receiver_public_key, reciever_private_key)
 
