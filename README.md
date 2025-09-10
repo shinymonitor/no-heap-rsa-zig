@@ -14,31 +14,22 @@ A performant single-file, heap-less implementation of RSA encryption and signatu
 
 ## API Reference:
 ### Key Management
-    pub fn gen_keys() Keys
 
-    // Save keys to PEM files
+    pub fn gen_keys() Keys
     pub fn save_private_key(keys: Keys, filename: []const u8) !void
     pub fn save_public_key(keys: Keys, filename: []const u8) !void
-
-    // Load keys from PEM files
     pub fn load_private_key(filename: []const u8) !Keys
     pub fn load_public_key(filename: []const u8) !Keys
 
 ### Encryption/Decryption
 
-    // Encrypt message with OAEP+ padding
     pub fn encrypt(message: []const u8, public_key: PublicKey) !BitsType
-
-    // Decrypt ciphertext 
     pub fn decrypt(blob: BitsType, keys: Keys) ![MAX_MESSAGE_LEN]u8
 
 
-### Digital Signatures
+### Signatures
 
-    // Sign message with private key
     pub fn sign(message: []const u8, keys: Keys) BitsType
-
-    // Verify signature with public key
     pub fn verify(message: []const u8, signature: BitsType, public_key: PublicKey) bool
 
 ## Usage Example
@@ -47,24 +38,18 @@ A performant single-file, heap-less implementation of RSA encryption and signatu
     const rsa = @import("rsa.zig");
 
     pub fn main() !void {
-        // Generate key pair
         const keys = rsa.gen_keys();
         
-        // Save keys to disk
         try rsa.save_private_key(keys, "private.pem");
         try rsa.save_public_key(keys, "public.pem");
         
-        // Encrypt message
         const message = "Hello, RSA!";
         const ciphertext = try rsa.encrypt(message, keys.public_key);
         
-        // Decrypt message
         const decrypted = try rsa.decrypt(ciphertext, keys);
         
-        // Sign message
         const signature = rsa.sign(message, keys);
         
-        // Verify signature
         const is_valid = rsa.verify(message, signature, keys.public_key);
         
         std.debug.print("Message: {s}\n", .{message});
@@ -78,5 +63,5 @@ Run the test script:
     zig run test.zig
 
 
-## Security Considerations
+## Warning
 **This implementation has not been professionally auditted. Use at your own risk**
