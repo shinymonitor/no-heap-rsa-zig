@@ -1,20 +1,82 @@
-Single-file library for heap-less implementation of RSA encryption and signatures in zig with OAEP+ padding using hashing function from standard library
+# No Heap RSA Zig
+A performant single-file, heap-less implementation of RSA encryption and signatures in Zig with OAEP+ padding and PEM key storage.
 
 **Change compile time variables in rsa.zig to use different modulus sizes**
 
-### Functions:
-5 public functions from rsa.zig
-- gen_keys()
-- sign(message, signer_public_key, signer_private_key) 
-- verify(message, signature, signer_public_key)
-- encrypt(message, receiver_public_key)
-- decrypt(encrypted_message , receiver_public_key, reciever_private_key)
+## Features
+- Zero heap allocation: Uses only stack buffers and compile-time constants
+- Montgomery multiplication for efficient modular exponentiation
+- PEM format key storage and loading
+- RSA encryption/decryption with OAEP+ padding
+- Digital signatures with SHA-256 hashing
+- Miller-Rabin primality testing for secure key generation
+- Configurable modulus size via compile-time constants
 
-### Testing:
-Run test.zig
+## API Reference:
+### Key Management
+    pub fn gen_keys() Keys
 
-### To-Do
-Montgomery multiplication
+    // Save keys to PEM files
+    pub fn save_private_key(keys: Keys, filename: []const u8) !void
+    pub fn save_public_key(keys: Keys, filename: []const u8) !void
 
-Saving Keys to disk (PEM or DER)
+    // Load keys from PEM files
+    pub fn load_private_key(filename: []const u8) !Keys
+    pub fn load_public_key(filename: []const u8) !Keys
 
+### Encryption/Decryption
+
+    // Encrypt message with OAEP+ padding
+    pub fn encrypt(message: []const u8, public_key: PublicKey) !BitsType
+
+    // Decrypt ciphertext 
+    pub fn decrypt(blob: BitsType, keys: Keys) ![MAX_MESSAGE_LEN]u8
+
+
+### Digital Signatures
+
+    // Sign message with private key
+    pub fn sign(message: []const u8, keys: Keys) BitsType
+
+    // Verify signature with public key
+    pub fn verify(message: []const u8, signature: BitsType, public_key: PublicKey) bool
+
+## Usage Example
+
+    const std = @import("std");
+    const rsa = @import("rsa.zig");
+
+    pub fn main() !void {
+        // Generate key pair
+        const keys = rsa.gen_keys();
+        
+        // Save keys to disk
+        try rsa.save_private_key(keys, "private.pem");
+        try rsa.save_public_key(keys, "public.pem");
+        
+        // Encrypt message
+        const message = "Hello, RSA!";
+        const ciphertext = try rsa.encrypt(message, keys.public_key);
+        
+        // Decrypt message
+        const decrypted = try rsa.decrypt(ciphertext, keys);
+        
+        // Sign message
+        const signature = rsa.sign(message, keys);
+        
+        // Verify signature
+        const is_valid = rsa.verify(message, signature, keys.public_key);
+        
+        std.debug.print("Message: {s}\n", .{message});
+        std.debug.print("Decrypted: {s}\n", .{decrypted[0..message.len]});
+        std.debug.print("Signature valid: {}\n", .{is_valid});
+    }
+
+## Testing:
+Run the test script:
+
+    zig run test.zig
+
+
+## Security Considerations
+**This implementation has not been professionally auditted. Use at your own risk**
