@@ -33,6 +33,3 @@ BOB DECRYPT MESSAGE: {72, 69, 76, 76, 79, 32, 66, 79, 66, 0, 0, 0, 0, 0, 0, 0, 0
 ==208==
 ==208== All heap blocks were freed -- no leaks are possible
 ==208==
-==208== Use --track-origins=yes to see where uninitialised values come from
-==208== For lists of detected and suppressed errors, rerun with: -s
-==208== ERROR SUMMARY: 45 errors from 5 contexts (suppressed: 0 from 0)
