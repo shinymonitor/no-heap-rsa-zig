@@ -1,4 +1,9 @@
-# No Heap RSA Zig
+
+<div align="center">
+    <img src="assets/LOGO.png", width="200">
+    <h1>Heapless RSA</h1>
+</div>
+
 A performant single-file, heap-less implementation of RSA encryption and signatures in Zig with OAEP+ padding and PEM key storage.
 
 **Change compile time variables in rsa.zig to use different modulus sizes**
