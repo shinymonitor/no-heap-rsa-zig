@@ -8,8 +8,6 @@ A performant single-file, heap-less implementation of RSA encryption and signatu
 
 **Change compile time variables in rsa.zig to use different modulus sizes**
 
-**Written for zig 0.14**
-
 ## Features
 - Zero heap allocation: Uses only stack buffers and compile-time constants
 - Montgomery multiplication for efficient modular exponentiation
@@ -73,3 +71,4 @@ Run the test script:
 ## Warning
 
 **This implementation has not been professionally auditted. Use at your own risk**
+
